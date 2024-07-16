@@ -11,6 +11,34 @@ import { chromium } from "playwright";
             .map((el) => {
                 const armour = el.querySelector("td > p > a > span")?.innerText;
 
+                const unformatedRarity = el.querySelector("td > p > a > span")?.getAttribute("style");
+
+                var rarity = unformatedRarity.split("#")[1];
+
+                switch (rarity) {
+                    case "FFFFFF ;":
+                        rarity = "Common";
+                        break;
+                    case "01BD39 ;":
+                        rarity = "Uncommon";
+                        break;
+                    case "01BFFF ;":
+                        rarity = "Rare";
+                        break;
+                    case "D1017B ;":
+                        rarity = "Very rare";
+                        break;
+                    case "B7861D ;":
+                        rarity = "Legendary";
+                        break;
+                    case "FF5901 ;":
+                        rarity = "Story item";
+                        break;
+                    default:
+                        rarity = null;
+                        break;
+                }
+
                 const image =
                     "https://bg3.wiki" + el.querySelector("td > p > span > span > a > img").getAttribute("src");
 
@@ -27,7 +55,7 @@ import { chromium } from "playwright";
 
                 const price = el.querySelector("td:nth-child(5)")?.innerText;
 
-                return { armour, image, armourClass, stealthDisadvantage, kgWeight, lbWeight, price };
+                return { armour, rarity, image, armourClass, stealthDisadvantage, kgWeight, lbWeight, price };
             })
             .filter((item) => item !== null)
     );
